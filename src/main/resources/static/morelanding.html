@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo List App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+            font-size: 18px;
+        }
+
+        .task-input {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-bottom: 2px solid #007BFF;
+            outline: none;
+            font-size: 16px;
+        }
+
+        .add-button {
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .task-number {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .task-checkbox {
+            margin-right: 10px;
+            transform: scale(1.5);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-photo {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Todo List</h1>
+    </header>
+    <div class="container">
+        <div>
+            <input type="text" id="task" class="task-input" placeholder="Add a new task..." autocomplete="off">
+            <button onclick="addTask()" class="add-button">Add</button>
+        </div>
+        <ul id="taskList">
+            <!-- Tasks will be added here dynamically -->
+        </ul>
+    </div>
+
+    <script>
+        let taskCount = 0;
+
+        function addTask() {
+            const taskInput = document.getElementById("task");
+            const taskText = taskInput.value.trim();
+
+            if (taskText === "") {
+                alert("Please enter a task.");
+                return;
+            }
+
+            const taskList = document.getElementById("taskList");
+            const taskItem = document.createElement("li");
+            taskItem.innerHTML = `
+                <input type="checkbox" class="task-checkbox" onclick="toggleTaskStatus(this)">
+                <span class="task-number">${++taskCount}.</span>
+                <div class="user-info">
+                    <img src="user.jpg" alt="User Photo" class="user-photo">
+                    <span>User Name</span>
+                </div>
+                <span>${taskText}</span>
+                <button onclick="deleteTask(this)">Delete</button>
+            `;
+
+            taskList.appendChild(taskItem);
+            taskInput.value = "";
+        }
+
+        function deleteTask(button) {
+            const taskItem = button.parentElement;
+            taskItem.remove();
+            updateTaskNumbers();
+        }
+
+        function toggleTaskStatus(checkbox) {
+            const taskItem = checkbox.parentElement;
+            taskItem.classList.toggle("completed");
+        }
+
+        function updateTaskNumbers() {
+            const taskItems = document.querySelectorAll("li");
+            taskCount = 0;
+            taskItems.forEach((item, index) => {
+                item.querySelector(".task-number").textContent = `${index + 1}.`;
+                taskCount++;
+            });
+        }
+    </script>
+</body>
+</html>
